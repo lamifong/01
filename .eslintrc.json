@@ -1,0 +1,17 @@
+{
+    "extends": "standard",
+    "plugins": [
+        "standard",
+        "promise"
+    ],
+    "globals": {
+        "describe": false,
+        "it": false
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "max-len": ["error", 100],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"]
+    }
+}

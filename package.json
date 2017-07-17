@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node src/app.js",
-    "test": "./node_modules/.bin/jshint src/*.js test/*.js && ./node_modules/.bin/eslint **/*.js && ./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/jshint public/js/*.js src/*.js test/*.js && ./node_modules/.bin/eslint public/js/*.js **/*.js && ./node_modules/.bin/mocha"
   },
   "dependencies": {
     "express": "4.15.3",

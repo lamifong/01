@@ -5,6 +5,8 @@
         "promise"
     ],
     "globals": {
+        "$": false,
+        "Plotly": false,
         "describe": false,
         "it": false
     },

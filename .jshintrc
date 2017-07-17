@@ -12,7 +12,11 @@
     "nonbsp": true,
     "nonew": true,
     "predef": [
+        "$",
+        "Plotly",
+        "__dirname",
         "describe",
+        "document",
         "it",
         "module",
         "process",

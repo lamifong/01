@@ -3,6 +3,7 @@ module.exports = (() => {
 
     const _ = require("lodash");
     const express = require("express");
+    const path = require("path");
     const redis = require("redis");
 
     /**
@@ -13,9 +14,13 @@ module.exports = (() => {
 
     /**
      * Names of candidates. This will be used to construct Redis keys.
+     *
+     * If you know the names in advance, you might want to put it here so it will persist across
+     * server restarts. Otherwise, you'll need to wait until everyone gets at least one vote before
+     * you can see the full statistics.
      * @type {Set.<string>}
      */
-    const candidates = new Set();
+    const candidates = new Set(["薯片", "林林", "正氣"]);
 
     const app = express();
 
@@ -90,6 +95,8 @@ module.exports = (() => {
             });
         });
     });
+
+    app.use(express.static(path.join(__dirname, "../public")));
 
     if (require.main === module) {
         app.listen(process.env.PORT || 3000);

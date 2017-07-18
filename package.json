@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A voting web app.",
   "license": "AGPL-3.0",
   "main": "src/app.js",

@@ -36,18 +36,42 @@ module.exports = (() => {
         const currentMinute = secondsSinceEpoch - secondsSinceEpoch % 60;
         const bucket = req.params.id + ":" + currentMinute.toString();
 
-        client.multi()
-            .incr(req.params.id)
-            .incr(bucket)
-            .expire(bucket, 666)
-            .exec((err, reply) => {
-                if (err) {
-                    return res.status(500).send(err.message);
-                }
+        // Rate limit to 1 vote per candidate per IP per 5 second.
+        const remoteAddress = req.connection.remoteAddress;
+        const currentFiveSecond = secondsSinceEpoch - secondsSinceEpoch % 5;
+        const rateLimitKey = remoteAddress + "|" + currentFiveSecond + "|" + req.params.id;
 
-                candidates.add(req.params.id);
-                return res.send(reply.toString());
-            });
+        client.get(rateLimitKey, (err, reply) => {
+            if (err) {
+                return res.status(500).send(err.message);
+            }
+
+            if (reply && reply >= 1) {
+                return res.send("Over limit!");
+            }
+
+            client.multi()
+                .incr(rateLimitKey)
+                .expire(rateLimitKey, 5)
+                .exec((err) => {
+                    if (err) {
+                        return res.status(500).send(err.message);
+                    }
+
+                    client.multi()
+                        .incr(req.params.id)
+                        .incr(bucket)
+                        .expire(bucket, 666)
+                        .exec((err, reply) => {
+                            if (err) {
+                                return res.status(500).send(err.message);
+                            }
+
+                            candidates.add(req.params.id);
+                            return res.send(reply.toString());
+                        });
+                });
+        });
     });
 
     /**
